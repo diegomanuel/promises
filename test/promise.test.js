@@ -1,14 +1,36 @@
 const chai = require("chai");
 const { FiqusPromise } = require("./../src/promise");
-
 const expect = chai.expect; 
 
+//executes the fn asynchronously
 function asyncTask(fn) {
   setTimeout(fn, 0);
 }
 
+function times(n, fn) {
+  for(let i = 0; i < n; i++) {
+    fn();
+  }
+}
+
 function someError() {
   return new Error("someError");
+}
+
+//creates a promise that is resolved synchronously
+function syncronicPromiseFactory(value) {
+  return new FiqusPromise((resolve, reject) => {
+    resolve(value);
+  });
+}
+
+//creates a promise that is resolved asynchronously
+function asyncronicPromiseFactory(value) {
+  return new FiqusPromise((resolve, reject) => {
+    asyncTask(function() {
+      resolve(1);  
+    });
+  });;
 }
 
 describe('FiqusPromise', function() {
@@ -18,44 +40,66 @@ describe('FiqusPromise', function() {
   describe("then()", function() {
     
     it("should resolve syncronic values", function() {
-      const promise = new FiqusPromise((resolve, reject) => {
-        resolve(1);
-      });
+      const promise = syncronicPromiseFactory(1);
       
-      return promise.then((v) => { 
+      promise.then((v) => { 
         expect(v).to.eql(1);
       });
+
+      return promise;
     });
     
     it("should resolve asyncronic values", function() {
-      const promise = new FiqusPromise((resolve, reject) => {
-        asyncTask(function() {
-          resolve(1);  
-        });
-      });
+      const promise = asyncronicPromiseFactory(1);
       
-      console.log(promise)
-      
-      return promise.then((v) => { 
+      promise.then((v) => { 
         expect(v).to.eql(1);
       });
+
+      return promise;
+    });
+
+    it("should resolve values returned in then()", function() {
+      const promise = asyncronicPromiseFactory(1);
+      
+      promise.then((v) => { 
+        return v + 1;
+      }).then((newValue) => {
+        expect(newValue).to.eql(2);
+      });
+
+      return promise;
+    });
+
+    it("should resolve multiple handlers for then()", function() {
+      const promise = asyncronicPromiseFactory(1);
+      
+      times(5, function() {
+        promise.then((v) => expect(v).to.eql(1));
+      })
+
+      return promise;
     });
     
   });
   
-    describe("catch()", function() {
-    
-      it("should return error if rejected", function() {
-        const promise = new FiqusPromise((resolve, reject) => {
-          reject(someError());
-        });
-        
-        return promise.catch((err) => { 
-          expect(err.name).to.eql("someError");
-        });
+  /**
+  describe("catch()", function() {
+  
+    it.only("should return error if rejected", function() {
+      const promise = new FiqusPromise((resolve, reject) => {
+        reject(someError());
       });
       
+      promise.catch((err) => { 
+        expect(err.message).to.eql("someError");
+      });
+
+      return promise;
     });
+    
+  });
+   */
   
 });
 
