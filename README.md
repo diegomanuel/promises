@@ -27,6 +27,7 @@ La notación CPS ocasiona que el tamaño del stack crezca con cada llamada a fun
 
 ## Promise
 "Aplana" el stack evitando los problemas de CPS, cada "continuacion" es escrita luego de un "then", que ahora pasa a ser como un ";" que separa las sentencias.
+Podemos pensar a la `Promise` como una "promesa" de un valor que estara disponible en el future, siempre luego de un `then`, de aca podemos derivar que siempre que tengamos una `Promise` en nuestro poder, alguna computacion asincronica esta sucediendo que sera resuelta en algun instante posterior.
 
 ````
 let userId = getUserIdFromToken(token);
