@@ -48,8 +48,8 @@ y ahi vive mucho de su poder para escribir codigo reusable a pesar de tener valo
     .then(function(users) {
        return augmentUsersWithFriends(users);
     })
-    .then(function(usersWithFriends) {
-      renderView("users", { users: users })
+    .then(function(usersAndFriends) {
+      renderView("users", { usersAndFriends: usersAndFriends })
     })
 ````
 
