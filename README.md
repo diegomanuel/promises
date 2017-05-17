@@ -68,7 +68,7 @@ function augmentUsersWithFriends(users) {
 ````
 function augmentUsersWithFriends(users) {
   return new Promise(function(resolve, reject) {
-    SomeFriendsDBService.buildMap(users, function(err, friensMap) {
+    SomeFriendsDBService.buildMap(users, function(err, friendsMap) {
       if(err) {
         reject(err)
       } else {
