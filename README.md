@@ -80,5 +80,5 @@ function augmentUsersWithFriends(users) {
 ````
 
 Y el codigo "cliente" de nuestra funcion `augmentUsersWithFriends` no difiere, ya que si un `then` devuelve una `Promise`
-se esperara a su resolucion antes de pasar el resultado a la proxima continuacion, si en cambio el `then` lo que devuelve es un valor, este se pasara directamente la proxima continuacion sin espera alguna.
+se esperara a su resolucion antes de pasar el resultado a la proxima continuacion, si en cambio el `then` lo que devuelve es un valor, este se pasara directamente la proxima continuacion sin espera alguna. (Algo de espera hay pero eso para el capitulo de `process.nextTick()`)
 
