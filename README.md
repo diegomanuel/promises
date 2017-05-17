@@ -59,7 +59,7 @@ Aqui la implementacion de augmentUsersWithFriends puede ser
 
 ````
 function augmentUsersWithFriends(users) {
-  return users.map((u) => { return { user: u, friends: friendsMap[users.id] } })
+  return users.map((u) => { return { user: u, friends: someObjectInScope.friendsMap[users.id] } })
 }
 ````
 
