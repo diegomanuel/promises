@@ -59,7 +59,7 @@ Aqui la implementacion de augmentUsersWithFriends puede ser
 
 ````
 function augmentUsersWithFriends(users) {
-  return users.map((u) => u.friends = friendsMap[users.id])
+  return users.map((u) => { return { user: u, friends: friendsMap[users.id] } })
 }
 ````
 
@@ -72,7 +72,7 @@ function augmentUsersWithFriends(users) {
       if(err) {
         reject(err)
       } else {
-        return users.map((u) => u.friends = friendsMap[users.id])
+        return users.map((u) => { return { user: u, friends: friendsMap[users.id] } })
       }
     })
   });
