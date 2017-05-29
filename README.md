@@ -19,6 +19,7 @@ User.get(userId, function(user) {
   });
 });
 ````
+> Si queres entender un poco mas sobre asincronismo y event loop mirate este => https://www.youtube.com/watch?v=8aGhZQkoFbQ
 
 ## Continuation passing style
 
