@@ -59,6 +59,16 @@ describe('FiqusPromise', function() {
       return promise;
     });
 
+    it("should resolve multiple handlers for then()", function() {
+      const promise = asyncronicPromiseFactory(1);
+      
+      times(5, function() {
+        promise.then((v) => expect(v).to.eql(1));
+      })
+
+      return promise;
+    });
+
     it("should resolve values returned in then()", function() {
       const promise = asyncronicPromiseFactory(1);
       
@@ -70,36 +80,41 @@ describe('FiqusPromise', function() {
 
       return promise;
     });
-
-    it("should resolve multiple handlers for then()", function() {
-      const promise = asyncronicPromiseFactory(1);
-      
-      times(5, function() {
-        promise.then((v) => expect(v).to.eql(1));
-      })
-
-      return promise;
-    });
     
   });
   
-  /**
   describe("catch()", function() {
   
-    it.only("should return error if rejected", function() {
+    it("should return error if rejected", function(done) {
       const promise = new FiqusPromise((resolve, reject) => {
         reject(someError());
       });
       
-      promise.catch((err) => { 
-        expect(err.message).to.eql("someError");
+      promise.then(() => { 
+        done("Should not call then!")
       });
 
-      return promise;
+      promise.catch((err) => {
+        expect(err.message).to.eql("someError");
+        done();
+      })
+    });
+
+    it("after catch() you can use then()", function(done) {
+      const promise = new FiqusPromise((resolve, reject) => {
+        reject(someError());
+      });
+      
+      promise
+        .catch((err) => {
+          expect(err.message).to.eql("someError");
+        })
+        .then(() => {
+          done()
+        });
     });
     
   });
-   */
   
 });
 
