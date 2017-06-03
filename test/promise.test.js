@@ -1,37 +1,7 @@
 const chai = require("chai");
 const { FiqusPromise } = require("./../src/promise");
 const expect = chai.expect; 
-
-//executes the fn asynchronously
-function asyncTask(fn) {
-  setTimeout(fn, 0);
-}
-
-function times(n, fn) {
-  for(let i = 0; i < n; i++) {
-    fn();
-  }
-}
-
-function someError() {
-  return new Error("someError");
-}
-
-//creates a promise that is resolved synchronously
-function syncronicPromiseFactory(value) {
-  return new FiqusPromise((resolve, reject) => {
-    resolve(value);
-  });
-}
-
-//creates a promise that is resolved asynchronously
-function asyncronicPromiseFactory(value) {
-  return new FiqusPromise((resolve, reject) => {
-    asyncTask(function() {
-      resolve(1);  
-    });
-  });;
-}
+const {   asyncronicPromiseFactory, syncronicPromiseFactory, someError, times } = require("./helpers")
 
 describe('FiqusPromise', function() {
   let promise = null;
@@ -86,9 +56,7 @@ describe('FiqusPromise', function() {
   describe("catch()", function() {
   
     it("should return error if rejected", function(done) {
-      const promise = new FiqusPromise((resolve, reject) => {
-        reject(someError());
-      });
+      const promise = asyncronicPromiseFactory(null, {rejected: true});
       
       promise.then(() => { 
         done("Should not call then!")
@@ -101,9 +69,7 @@ describe('FiqusPromise', function() {
     });
 
     it("after catch() you can use then()", function(done) {
-      const promise = new FiqusPromise((resolve, reject) => {
-        reject(someError());
-      });
+      const promise = asyncronicPromiseFactory(null, {rejected: true});
       
       promise
         .catch((err) => {
@@ -113,8 +79,25 @@ describe('FiqusPromise', function() {
           done()
         });
     });
-    
+
   });
+
+  describe("then() and catch()", function() {
+
+    it("if then() throws catch() should handle", function() {
+      const promise = asyncronicPromiseFactory(1);
+      
+      return promise
+        .then(() => {
+          throw someError();
+        })
+        .catch((err) => {
+          expect(err.message).to.eql("someError");
+        })
+
+    })
+
+  })
   
 });
 
