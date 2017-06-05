@@ -88,3 +88,12 @@ function augmentUsersWithFriends(users) {
 Y el codigo "cliente" de nuestra funcion `augmentUsersWithFriends` no difiere, ya que si un `then` devuelve una `Promise`
 se esperara a su resolucion antes de pasar el resultado a la proxima continuacion, si en cambio el `then` lo que devuelve es un valor, este se pasara directamente la proxima continuacion sin espera alguna. (Algo de espera hay pero eso para el capitulo de `process.nextTick()`)
 
+
+### Desafio FiqusPromise
+
+La idea es implementar tu propia version de una Promise, para eso segui estos pasos:
+
+1. `git clone git@github.com:Tyny/promises.git`
+2. `npm install`
+3. `npm test`
+4. Edita `src/promise.js` y hace que pasen todos los tests! Buena Suerte!
