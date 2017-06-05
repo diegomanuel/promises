@@ -84,8 +84,8 @@ describe('FiqusPromise', function() {
 
   describe("then() and catch()", function() {
 
-    it("if then() throws catch() should handle", function() {
-      const promise = asyncronicPromiseFactory(1);
+    it("if then() throws synchronically catch() should handle", function() {
+      const promise = syncronicPromiseFactory(1);
       
       return promise
         .then(() => {
@@ -95,6 +95,18 @@ describe('FiqusPromise', function() {
           expect(err.message).to.eql("someError");
         })
 
+    })
+
+    it("if then() throws asynchronically catch() should handle", function() {
+      const promise = asyncronicPromiseFactory(1);
+      
+      return promise
+        .then(() => {
+          throw someError();
+        })
+        .catch((err) => {
+          expect(err.message).to.eql("someError");
+        })
     })
 
   })
