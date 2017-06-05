@@ -1,7 +1,6 @@
 # Promises
 
-Para tener un entendimiento claro y preciso de que es una Promise primero debemos tener claro que es el codigo asincronico, nos
-vamos a centrar especialmente en Promises en javascript.
+Para tener un entendimiento claro y preciso de que es una Promise primero debemos tener claro que es el codigo asincronico, una vez que tengamos un mejor entendimiento de que es el event loop y el callback queue en javascript nos vamos a meter a fondo en que es una Promise, nos vamos a centrar especialmente en Promises en javascript, tengamos en claro que existen implementaciones de Futures o Promises en otros lenguajes y que la forma de implementar codigo asincronico puede variar entre plataformas
 
 > Si queres entender un poco mas sobre asincronismo y event loop mirate este => https://www.youtube.com/watch?v=8aGhZQkoFbQ
 
