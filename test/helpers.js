@@ -19,7 +19,7 @@ function someError() {
 function syncronicPromiseFactory(value, {rejected = false} = {}) {
   return new FiqusPromise((resolve, reject) => {
     if(!rejected) {
-      resolve(1);
+      resolve(value);
     } else {
       reject(someError());
     }
@@ -31,7 +31,7 @@ function asyncronicPromiseFactory(value, {rejected = false} = {}) {
   return new FiqusPromise((resolve, reject) => {
     asyncTask(function() {
       if(!rejected) {
-        resolve(1);
+        resolve(value);
       } else {
         reject(someError());
       } 
