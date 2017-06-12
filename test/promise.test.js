@@ -50,6 +50,28 @@ describe('FiqusPromise', function() {
 
       return promise;
     });
+
+    it("should resolve values independently", function(done) {
+      const promise = asyncronicPromiseFactory(1);
+      
+      promise.then((v) => { 
+        expect(v).to.eql(1);
+        return v + 1;
+      });
+
+      setTimeout(() => {
+        promise.then((v) => {
+          try {
+            expect(v).to.eql(1);
+            done();
+          } catch(err) {
+            done(err);
+          }
+        });
+        
+      })
+
+    });
     
   });
   
