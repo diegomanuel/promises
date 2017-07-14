@@ -3,8 +3,8 @@ const { FiqusPromise } = require("./../src/promise");
 const expect = chai.expect; 
 const {   asyncronicPromiseFactory, syncronicPromiseFactory, someError, times } = require("./helpers")
 
-describe('FiqusPromise', suite(FiqusPromise));
 describe('NodePromise', suite(Promise));
+describe('FiqusPromise', suite(FiqusPromise));
 
 /* #################################################################################################### */
                                          /* TEST SUITES */
@@ -19,28 +19,27 @@ function suite(PromiseConstructor) {
         it("should resolve syncronic values", function() {
           const promise = syncronicPromiseFactory(1, { PromiseConstructor });
           
-          promise.then((v) => { 
+          return promise.then((v) => { 
             expect(v).to.eql(1);
           });
-
-          return promise;
         });
         
         it("should resolve asyncronic values", function() {
           const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
           
-          promise.then((v) => { 
+          return promise.then((v) => { 
             expect(v).to.eql(1);
           });
-
-          return promise;
         });
 
         it("should resolve multiple handlers for then()", function() {
-          const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
+          let promise = asyncronicPromiseFactory(1, { PromiseConstructor });
           
           times(5, function() {
-            promise.then((v) => expect(v).to.eql(1));
+            promise = promise.then((v) => {
+              expect(v).to.eql(1);
+              return v;
+            });
           })
 
           return promise;
@@ -49,25 +48,21 @@ function suite(PromiseConstructor) {
         it("should resolve values returned in then()", function() {
           const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
           
-          promise.then((v) => { 
+          return promise.then((v) => { 
             return v + 1;
           }).then((newValue) => {
             expect(newValue).to.eql(2);
           });
-
-          return promise;
         });
 
         it("should resolve values returned as Promises in then()", function() {
           const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
           
-          promise.then((v) => { 
+          return promise.then((v) => { 
             return asyncronicPromiseFactory(v + 1, { PromiseConstructor });
           }).then((newValue) => {
             expect(newValue).to.eql(2);
           });
-
-          return promise;
         });
 
         it("should resolve values independently", function(done) {
@@ -76,18 +71,14 @@ function suite(PromiseConstructor) {
           promise.then((v) => { 
             expect(v).to.eql(1);
             return v + 1;
-          });
+          }).catch(done);
 
           setTimeout(() => {
             promise.then((v) => {
-              try {
-                expect(v).to.eql(1);
-                done();
-              } catch(err) {
-                done(err);
-              }
-            });
-            
+              expect(v).to.eql(1);
+            })
+            .then(done)
+            .catch(done)
           })
 
         });
@@ -96,17 +87,17 @@ function suite(PromiseConstructor) {
       
       describe("catch()", function() {
       
-        it("should return error if rejected", function(done) {
+        it("should return error if rejected", function() {
           const promise = asyncronicPromiseFactory(null, {rejected: true, PromiseConstructor});
           
-          promise.then(() => { 
-            done("Should not call then!")
-          });
-
-          promise.catch((err) => {
-            expect(err.message).to.eql("someError");
-            done();
-          })
+          return promise
+            .then(() => { 
+              //this line should not be called!
+              expect(true).to.eql(false);
+            })
+            .catch((err) => {
+              expect(err.message).to.eql("someError");
+            })
         });
 
         it("after catch() you can use then()", function(done) {
@@ -116,38 +107,40 @@ function suite(PromiseConstructor) {
             .catch((err) => {
               expect(err.message).to.eql("someError");
             })
-            .then(() => {
-              done()
-            });
+            .then(done);
         });
 
       });
 
       describe("then() and catch()", function() {
 
-        it("if then() throws synchronically catch() should handle", function() {
+        it("if then() throws synchronically catch() should handle", function(done) {
           const promise = syncronicPromiseFactory(1, {PromiseConstructor});
           
-          return promise
+          promise
             .then(() => {
               throw someError();
             })
             .catch((err) => {
               expect(err.message).to.eql("someError");
+              done();
             })
+            .catch(done)
 
         })
 
-        it("if then() throws asynchronically catch() should handle", function() {
+        it("if then() throws asynchronically catch() should handle", function(done) {
           const promise = asyncronicPromiseFactory(1, {PromiseConstructor});
           
-          return promise
+          promise
             .then(() => {
               throw someError();
             })
             .catch((err) => {
               expect(err.message).to.eql("someError");
+              done();
             })
+            .catch(done)
         })
 
       })
