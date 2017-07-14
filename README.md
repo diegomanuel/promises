@@ -1,13 +1,14 @@
 # Promises
 
-Para tener un entendimiento claro y preciso de que es una Promise primero debemos tener claro que es el asincronismo.
+Para tener un entendimiento claro y preciso de que es una Promise primero debemos tener claro que es el asincronismo y como
+se usa CPS en javascript para soportarlo
 
 ## Codigo sincronico (ruby :P)
 
 ````
 user_id = get_user_id_from_token(token)
-user = User.get(user_id)
-posts = Post.get({ id: user.id, tags: user.interests })
+user = User.get(user_id) # esta llamada es bloqueante
+posts = Post.get({ id: user.id, tags: user.interests }) # esta llamada es bloqueante
 render_view "posts", { posts: posts }
 ````
 
