@@ -39,6 +39,8 @@ Una `Promise` es un valor! En realidad es un poco mas, es un valor + una computa
 El uso de Promises tambien "aplana" el stack evitando los problemas de CPS, cada "continuacion" es escrita luego de un "then", que ahora pasa a ser como un ";" que separa las sentencias.
 Es importante tener en cuenta que siempre que tengamos una `Promise` en nuestro poder, alguna computacion asincronica esta sucediendo que sera resuelta en algun instante posterior.
 
+Aca podes leer un standard de Promises en Javascript [https://promisesaplus.com/](https://promisesaplus.com/)
+
 ````
 let userId = getUserIdFromToken(token);
 User.get(userId)

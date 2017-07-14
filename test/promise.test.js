@@ -6,8 +6,6 @@ const {   asyncronicPromiseFactory, syncronicPromiseFactory, someError, times } 
 describe('FiqusPromise', suite(FiqusPromise));
 describe('NodePromise', suite(Promise));
 
-
-
 /* #################################################################################################### */
                                          /* TEST SUITES */
 /* #################################################################################################### */
