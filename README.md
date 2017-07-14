@@ -54,6 +54,7 @@ User.get(userId)
 El then es como un `map` capaz de transformar una Promise en otra Promise que retorne un valor nuevo
 
 `const newArray = [1].map((v) => v + 1)`
+
 `const newPromise = somePromise.then((v) => v + 1)`
 
 ### Desafio FiqusPromise
