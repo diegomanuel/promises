@@ -16,8 +16,8 @@ function someError() {
 }
 
 //creates a promise that is resolved synchronously
-function syncronicPromiseFactory(value, {rejected = false} = {}) {
-  return new FiqusPromise((resolve, reject) => {
+function syncronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise } = {}) {
+  return new PromiseConstructor((resolve, reject) => {
     if(!rejected) {
       resolve(value);
     } else {
@@ -27,8 +27,8 @@ function syncronicPromiseFactory(value, {rejected = false} = {}) {
 }
 
 //creates a promise that is resolved asynchronously
-function asyncronicPromiseFactory(value, {rejected = false} = {}) {
-  return new FiqusPromise((resolve, reject) => {
+function asyncronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise } = {}) {
+  return new PromiseConstructor((resolve, reject) => {
     asyncTask(function() {
       if(!rejected) {
         resolve(value);
