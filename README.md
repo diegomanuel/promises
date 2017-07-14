@@ -64,6 +64,8 @@ El then es como un `map` capaz de transformar una Promise en otra Promise que re
 
 La idea es implementar tu propia version de una Promise, para eso segui estos pasos:
 
+> Todos los tests son corridos contra la Promise nativa de node tambien para que tengas certeza de que los tests funcionan
+
 1. `git clone git@github.com:Tyny/promises.git`
 2. `npm install`
 3. `npm test`
