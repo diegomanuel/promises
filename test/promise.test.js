@@ -60,6 +60,18 @@ function suite(PromiseConstructor) {
           return promise;
         });
 
+        it("should resolve values returned as Promises in then()", function() {
+          const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
+          
+          promise.then((v) => { 
+            return asyncronicPromiseFactory(v + 1, { PromiseConstructor });
+          }).then((newValue) => {
+            expect(newValue).to.eql(2);
+          });
+
+          return promise;
+        });
+
         it("should resolve values independently", function(done) {
           const promise = asyncronicPromiseFactory(1, { PromiseConstructor });
           
