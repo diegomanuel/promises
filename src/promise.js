@@ -16,4 +16,4 @@ function FiqusPromise(resolver) {
   resolver(fulfill, reject);
 }
 
-module.exports = { FiqusPromise }
+module.exports = FiqusPromise;

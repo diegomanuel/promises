@@ -1,4 +1,4 @@
-const { FiqusPromise } = require("./../src/promise");
+const FiqusPromise = require("./../src/promise");
 
 //executes the fn asynchronously
 function asyncTask(fn) {
@@ -6,17 +6,17 @@ function asyncTask(fn) {
 }
 
 function times(n, fn) {
-  for(let i = 0; i < n; i++) {
-    fn();
+  for(let idx = 1; idx <= n; idx++) {
+    fn(idx);
   }
 }
 
-function someError() {
-  return new Error("someError");
+function someError(message = "someError") {
+  return new Error(message);
 }
 
 //creates a promise that is resolved synchronously
-function syncronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise } = {}) {
+function synchronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise} = {}) {
   return new PromiseConstructor((resolve, reject) => {
     if(!rejected) {
       resolve(value);
@@ -27,7 +27,7 @@ function syncronicPromiseFactory(value, {rejected = false, PromiseConstructor = 
 }
 
 //creates a promise that is resolved asynchronously
-function asyncronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise } = {}) {
+function asynchronicPromiseFactory(value, {rejected = false, PromiseConstructor = FiqusPromise} = {}) {
   return new PromiseConstructor((resolve, reject) => {
     asyncTask(function() {
       if(!rejected) {
@@ -36,12 +36,12 @@ function asyncronicPromiseFactory(value, {rejected = false, PromiseConstructor =
         reject(someError());
       } 
     });
-  });;
+  });
 }
 
 module.exports = {
-  asyncronicPromiseFactory,
-  syncronicPromiseFactory,
+  asynchronicPromiseFactory,
+  synchronicPromiseFactory,
   someError,
   times
-}
+};
