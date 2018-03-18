@@ -242,5 +242,108 @@ function suite(PromiseConstructor) {
         });
 
       });
+
+      describe("resolve() and reject()", () => {
+
+        it("should call then() after Promise.resolve()", (done) => {
+          PromiseConstructor.resolve(11)
+            .catch(() => {
+              done("This line should not be called!");
+            })
+            .then((v) => {
+              expect(v).to.eql(11);
+              done();
+            })
+            .catch(done);
+        });
+
+        it("should call catch() after Promise.reject()", (done) => {
+          PromiseConstructor.reject(11)
+            .then(() => {
+              done("This line should not be called!");
+            })
+            .catch((v) => {
+              expect(v).to.eql(11);
+              done();
+            })
+            .catch(done);
+        });
+
+        it("should call catch() after Promise.resolve() with a rejected promise", (done) => {
+          PromiseConstructor.resolve(PromiseConstructor.reject(someError()))
+            .then(() => {
+              done("This line should not be called!");
+            })
+            .catch((err) => {
+              expect(err.message).to.eql("someError");
+              done();
+            })
+            .catch(done);
+        });
+
+        it("should call catch() after Promise.reject() with a resolved promise", (done) => {
+          let confirm = 0;
+
+          PromiseConstructor.reject(PromiseConstructor.resolve(22))
+            .then(() => {
+              done("This line should not be called!");
+            })
+            .catch((promise) => {
+              confirm++;
+              return promise;
+            })
+            .then((v) => {
+              expect(confirm).to.eql(1);
+              expect(v).to.eql(22);
+              done();
+            })
+            .catch(done);
+        });
+
+        it("should call catch() after Promise.reject() with a function returning a resolved promise", (done) => {
+          let confirm = 0;
+
+          PromiseConstructor.reject(() => {
+              return PromiseConstructor.resolve(22);
+            })
+            .then(() => {
+              done("This line should not be called!");
+            })
+            .catch((func) => {
+              confirm++;
+              return func()
+                .catch(() => {
+                  done("This line should not be called!");
+                });
+            })
+            .then((v) => {
+              expect(confirm).to.eql(1);
+              expect(v).to.eql(22);
+              done();
+            })
+            .catch(done);
+        });
+
+        it("should call then() after Promise.resolve() with a function returning a rejected promise", (done) => {
+          PromiseConstructor.resolve(() => {
+              return PromiseConstructor.reject(someError());
+            })
+            .catch(() => {
+              done("This line should not be called!");
+            })
+            .then((func) => {
+              return func()
+                .then(() => {
+                  done("This line should not be called!");
+                })
+                .catch((err) => {
+                  expect(err.message).to.eql("someError");
+                  done();
+                });
+            })
+            .catch(done);
+        });
+
+      });
   }
 }
